@@ -1,0 +1,25 @@
+<mvc:View controllerName="be.ap.helloworld.controller.Master" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m">
+	<Shell id="shell">
+		<App id="app">
+			<pages>
+				<Page id="page" title="{i18n>title}">
+					<content>
+                    <Label text="{i18n>Name}" labelFor="productInput" />
+                    <Input
+                        id="productInput"
+                        placeholder="{i18n>Placeholder}"
+                        value="{json>/Name}">
+	            	</Input>
+                    <Button text="{i18n>ButtonName}"
+						press="onPress"
+						ariaDescribedBy="defaultButtonDescription genericButtonDescription">
+					<layoutData>
+						<FlexItemData growFactor="1" />
+					</layoutData>
+				</Button>
+                    </content>
+				</Page>
+			</pages>
+		</App>
+	</Shell>
+</mvc:View>

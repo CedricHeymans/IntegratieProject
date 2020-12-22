@@ -1,0 +1,79 @@
+<mvc:View
+    controllerName="be.ap.Flight.controller.Bookings"
+    xmlns="sap.m"
+    xmlns:semantic="sap.f.semantic"
+    xmlns:core="sap.ui.core"
+    xmlns:mvc="sap.ui.core.mvc">
+
+    <semantic:SemanticPage
+        id="bookingsPage"
+        busy="{bookingsView>/busy}"
+        busyIndicatorDelay="{bookingsView>/delay}">
+        <semantic:titleHeading>
+            <Title
+                text="{bookingsView/Flight/Connid} - {bookingsView/Flight/Fldate}"
+                level="H2"/>
+        </semantic:titleHeading>
+        <semantic:headerContent>
+            <ObjectAttribute text="{Currcode}"
+                            title="{i18n>Currcode}"/>
+            <ObjectAttribute text="{Url}"
+                 title="{i18n>Url}"/>
+
+        </semantic:headerContent>
+        <semantic:content>
+                <Table items="{bookingsView>/Bookings}">
+                    <columns>
+                        <Column>
+                            <Text text="{i18n>agencynum}"/>
+                        </Column>
+                        <Column>
+                            <Text text="{i18n>bookid}"/>
+                        </Column>
+                        <Column>
+                            <Text text="{i18n>cancelled}"/>
+                        </Column>
+                        <Column>
+                            <Text text="{i18n>class}"/>
+                        </Column>
+                        <Column>
+                            <Text text="{i18n>luggweight}"/>
+                        </Column>
+                    </columns>
+                    <items>
+                        <ColumnListItem>
+                            <cells>
+                                <ObjectIdentifier text="{bookingsView>Agencynum}"/>
+                                <ObjectIdentifier text="{bookingsView>Bookid}"/>
+                                <ObjectIdentifier text="{bookingsView>Cancelled}"/>
+                                <ObjectIdentifier text="{bookingsView>Class}"/>
+                                <ObjectIdentifier text="{bookingsView>Luggweight}"/>
+                            </cells>
+                        </ColumnListItem>
+                    </items>
+                </Table>
+        </semantic:content>
+        <!--Semantic ShareMenu Buttons-->
+
+        <semantic:closeAction>
+            <semantic:CloseAction
+                    id="closeColumn"
+                    press=".onCloseBookingsPress"/>
+        </semantic:closeAction>
+
+        <semantic:fullScreenAction>
+            <semantic:FullScreenAction
+                    id="enterFullScreen"
+                    visible="{= !${device>/system/phone} &amp;&amp; !${appView>/actionButtonsInfo/midColumn/fullScreen}}"
+                    press=".toggleFullScreen"/>
+        </semantic:fullScreenAction>
+        <semantic:exitFullScreenAction>
+            <semantic:ExitFullScreenAction
+                    id="exitFullScreen"
+                    visible="{= !${device>/system/phone} &amp;&amp; ${appView>/actionButtonsInfo/midColumn/fullScreen}}"
+                    press=".toggleFullScreen"/>
+        </semantic:exitFullScreenAction>
+
+    </semantic:SemanticPage>
+
+</mvc:View>
