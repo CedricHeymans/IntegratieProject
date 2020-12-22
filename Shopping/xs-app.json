@@ -1,13 +1,6 @@
 {
-  "welcomeFile": "/index.html",
   "authenticationMethod": "none",
   "routes": [
-    {
-      "authenticationType": "none",
-      "csrfProtection": false,
-      "source": "^/sap/opu/odata/sap/ZSD_00_SHOPPING_SRV/",
-      "destination": "r36z"
-    },
     {
       "source": "^(.*)$",
       "target": "$1",
