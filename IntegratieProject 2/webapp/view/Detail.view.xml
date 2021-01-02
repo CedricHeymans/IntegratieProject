@@ -1,0 +1,165 @@
+<mvc:View
+	controllerName="IntProject.IntegratieProject.controller.Detail"
+	xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:semantic="sap.f.semantic"
+	xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core">
+
+	<semantic:SemanticPage
+		id="detailPage"
+		busy="{detailView>/busy}"
+		busyIndicatorDelay="{detailView>/delay}">
+		<semantic:titleHeading>
+			<Title
+				text="{Tknum}"
+				level="H2"/>
+		</semantic:titleHeading>
+		<semantic:headerContent>
+			<IconTabBar
+		        id="idIconTabBarNoIcons"
+		        expanded="{device>/isNoPhone}"
+		        class="sapUiResponsiveContentPadding">
+		<items>
+			<IconTabFilter text="General Information" key="generalInformation">
+				<f:Form id="FormDisplay354"
+			editable="false">
+			<f:title>
+				<core:Title text="Shipmentnummer: {Tknum}"/>
+			</f:title>
+			<f:layout>
+				<f:ResponsiveGridLayout
+					labelSpanXL="3"
+					labelSpanL="3"
+					labelSpanM="3"
+					labelSpanS="12"
+					adjustLabelSpan="false"
+					emptySpanXL="4"
+					emptySpanL="4"
+					emptySpanM="4"
+					emptySpanS="0"
+					columnsXL="1"
+					columnsL="1"
+					columnsM="1"
+					singleContainerFullSize="false" />
+			</f:layout>
+			<f:formContainers>
+				<f:FormContainer>
+					<f:formElements>
+						<f:FormElement label="Transporter">
+							<f:fields>
+								<Text text="{Transporteur}"/>
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="Container ID ">
+							<f:fields>
+								<Text text="{ContainerId}"/>
+							</f:fields>
+						</f:FormElement>
+					</f:formElements>
+				</f:FormContainer>
+			</f:formContainers>
+		</f:Form>
+			</IconTabFilter>
+			<IconTabFilter text="Deliveries" key="deliveries">
+			<VBox>
+                <Table id="lineItemsList" width="auto" items="{DeliverySet}" updateFinished=".onListUpdateFinished" noDataText="{i18n>detailLineItemTableNoDataText}" busyIndicatorDelay="{detailView>/lineItemTableDelay}">
+                    <headerToolbar>
+                        <Toolbar>
+                            <Title id="lineItemsTitle" text="Deliveries" titleStyle="H3" level="H3"/>
+                        </Toolbar>
+                    </headerToolbar>
+                    <columns>
+                        <Column>
+                            <Text text="{i18n>tknum}"/>
+                        </Column>
+                        <Column>
+                            <Text text="{i18n>vbeln}"/>
+                        </Column>
+                        <Column>
+                            <Text text="{i18n>vstel}"/>
+                        </Column>
+                        <Column>
+                            <Text text="{i18n>werks}"/>
+                        </Column>
+                    </columns>
+                    <items>
+                        <ColumnListItem type="Active" press="onPress">
+                            <cells>
+                                <ObjectIdentifier text="{Tknum}"/>
+                                <ObjectIdentifier text="{Vbeln}"/>
+                                <ObjectIdentifier text="{Vstel}"/>
+                                <ObjectIdentifier text="{Werks}"/>
+                            </cells>
+                        </ColumnListItem>
+                    </items>
+                </Table>
+                
+                <Table id="deliveryItems" items="{detailView>/DeliveryItems}" noDataText="{i18n>detailLineItemTableNoDataText}">
+                    <columns>
+                        <Column>
+                            <Text text="{i18n>vbeln}"/>
+                        </Column>
+                        <Column>
+                            <Text text="{i18n>posnr}"/>
+                        </Column>
+                        <Column>
+                            <Text text="{i18n>matnr}"/>
+                        </Column>
+                        <Column>
+                            <Text text="{i18n>lfimg}"/>
+                        </Column>
+                        <Column>
+                            <Text text="{i18n>vrkme}"/>
+                        </Column>
+                    </columns>
+                    <items>
+                        <ColumnListItem>
+                            <cells>
+                                <ObjectIdentifier text="{Vbeln}"/>
+                                <ObjectIdentifier text="{Posnr}"/>
+                                <ObjectIdentifier text="{Matnr}"/>
+                                <ObjectIdentifier text="{Lfimg}"/>
+                                <ObjectIdentifier text="{Vrkme}"/>
+                            </cells>
+                        </ColumnListItem>
+                    </items>
+                </Table>
+            </VBox>
+			</IconTabFilter>
+		</items>
+	</IconTabBar>
+		</semantic:headerContent>
+		<semantic:content>
+			
+		</semantic:content>
+		<!--Semantic ShareMenu Buttons-->
+		<semantic:sendEmailAction>
+			<semantic:SendEmailAction
+				id="shareEmail"
+				press=".onSendEmailPress"/>
+		</semantic:sendEmailAction>
+
+		<semantic:closeAction>
+			<semantic:CloseAction
+					id="closeColumn"
+					press=".onCloseDetailPress"/>
+		</semantic:closeAction>
+
+		<semantic:fullScreenAction>
+			<semantic:FullScreenAction
+					id="enterFullScreen"
+					visible="{= !${device>/system/phone} &amp;&amp; !${appView>/actionButtonsInfo/midColumn/fullScreen}}"
+					press=".toggleFullScreen"/>
+		</semantic:fullScreenAction>
+		<semantic:exitFullScreenAction>
+			<semantic:ExitFullScreenAction
+					id="exitFullScreen"
+					visible="{= !${device>/system/phone} &amp;&amp; ${appView>/actionButtonsInfo/midColumn/fullScreen}}"
+					press=".toggleFullScreen"/>
+		</semantic:exitFullScreenAction>
+
+	</semantic:SemanticPage>
+
+</mvc:View>
