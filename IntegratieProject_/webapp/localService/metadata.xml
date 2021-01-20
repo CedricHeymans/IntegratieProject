@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0"
+    xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx"
+    xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata"
+    xmlns:sap="http://www.sap.com/Protocols/SAPData">
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema Namespace="ZSD_SHIPMENT02_SRV_SRV" xml:lang="en" sap:schema-version="1"
+            xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            <EntityType Name="DeliveryItem" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Vbeln"/>
+                </Key>
+                <Property Name="Vbeln" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Sales document" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Posnr" Type="Edm.String" Nullable="false" MaxLength="6" sap:unicode="false" sap:label="Item" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Matnr" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Material" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Lfimg" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3" sap:unicode="false" sap:label="Delivery Qty" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Vrkme" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Sales unit" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" sap:semantics="unit-of-measure"/>
+            </EntityType>
+            <EntityType Name="Shipment" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Tknum"/>
+                </Key>
+                <Property Name="Tplst" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="TransportPlanPt" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Tknum" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Shipment Number" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="PlannedDate" Type="Edm.DateTime" Nullable="false" Precision="7" sap:unicode="false" sap:label="Created on" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="TimeIn" Type="Edm.Time" Nullable="false" Precision="0" sap:unicode="false" sap:label="CurrentTmeChkIn" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="TimeOut" Type="Edm.Time" Nullable="false" Precision="0" sap:unicode="false" sap:label="ActLoadStrtTime" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="AppTime" Type="Edm.Time" Nullable="false" Precision="0" sap:unicode="false" sap:label="PlannedTimeChIn" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Remarks" Type="Edm.String" Nullable="false" MaxLength="200" sap:unicode="false" sap:label="Data Element For Remarks" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Transporteur" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Search term" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ContainerId" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Container ID" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <NavigationProperty Name="ShipToDelivNav" Relationship="ZSD_SHIPMENT02_SRV_SRV.ShipToDelivAss" FromRole="FromRole_ShipToDelivAss" ToRole="ToRole_ShipToDelivAss"/>
+            </EntityType>
+            <EntityType Name="Delivery" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Tknum"/>
+                </Key>
+                <Property Name="Tknum" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Shipment Number" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Vbeln" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Sales document" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Vstel" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Shipping Point" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Werks" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Plant" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <NavigationProperty Name="DelivToShipNav" Relationship="ZSD_SHIPMENT02_SRV_SRV.DelivToShipAss" FromRole="FromRole_DelivToShipAss" ToRole="ToRole_DelivToShipAss"/>
+                <NavigationProperty Name="DelivToDelitNav" Relationship="ZSD_SHIPMENT02_SRV_SRV.DelivToDelitAss" FromRole="FromRole_DelivToDelitAss" ToRole="ToRole_DelivToDelitAss"/>
+            </EntityType>
+            <Association Name="ShipToDelivAss" sap:content-version="1">
+                <End Type="ZSD_SHIPMENT02_SRV_SRV.Shipment" Multiplicity="1" Role="FromRole_ShipToDelivAss"/>
+                <End Type="ZSD_SHIPMENT02_SRV_SRV.Delivery" Multiplicity="*" Role="ToRole_ShipToDelivAss"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_ShipToDelivAss">
+                        <PropertyRef Name="Tknum"/>
+                    </Principal>
+                    <Dependent Role="ToRole_ShipToDelivAss">
+                        <PropertyRef Name="Tknum"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="DelivToShipAss" sap:content-version="1">
+                <End Type="ZSD_SHIPMENT02_SRV_SRV.Delivery" Multiplicity="*" Role="FromRole_DelivToShipAss"/>
+                <End Type="ZSD_SHIPMENT02_SRV_SRV.Shipment" Multiplicity="1" Role="ToRole_DelivToShipAss"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_DelivToShipAss">
+                        <PropertyRef Name="Tknum"/>
+                    </Principal>
+                    <Dependent Role="ToRole_DelivToShipAss">
+                        <PropertyRef Name="Tknum"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="DelivToDelitAss" sap:content-version="1">
+                <End Type="ZSD_SHIPMENT02_SRV_SRV.Delivery" Multiplicity="1" Role="FromRole_DelivToDelitAss"/>
+                <End Type="ZSD_SHIPMENT02_SRV_SRV.DeliveryItem" Multiplicity="*" Role="ToRole_DelivToDelitAss"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_DelivToDelitAss">
+                        <PropertyRef Name="Tknum"/>
+                    </Principal>
+                    <Dependent Role="ToRole_DelivToDelitAss">
+                        <PropertyRef Name="Vbeln"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <EntityContainer Name="ZSD_SHIPMENT02_SRV_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
+                <EntitySet Name="DeliveryItemSet" EntityType="ZSD_SHIPMENT02_SRV_SRV.DeliveryItem" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="ShipmentSet" EntityType="ZSD_SHIPMENT02_SRV_SRV.Shipment" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="DeliverySet" EntityType="ZSD_SHIPMENT02_SRV_SRV.Delivery" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <AssociationSet Name="DelivToShipAssSet" Association="ZSD_SHIPMENT02_SRV_SRV.DelivToShipAss" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="DeliverySet" Role="FromRole_DelivToShipAss"/>
+                    <End EntitySet="ShipmentSet" Role="ToRole_DelivToShipAss"/>
+                </AssociationSet>
+                <AssociationSet Name="ShipToDelivAssSet" Association="ZSD_SHIPMENT02_SRV_SRV.ShipToDelivAss" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="ShipmentSet" Role="FromRole_ShipToDelivAss"/>
+                    <End EntitySet="DeliverySet" Role="ToRole_ShipToDelivAss"/>
+                </AssociationSet>
+                <AssociationSet Name="DelivToDelitAssSet" Association="ZSD_SHIPMENT02_SRV_SRV.DelivToDelitAss" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="DeliverySet" Role="FromRole_DelivToDelitAss"/>
+                    <End EntitySet="DeliveryItemSet" Role="ToRole_DelivToDelitAss"/>
+                </AssociationSet>
+            </EntityContainer>
+            <atom:link rel="self" href="http://r36z.ucc.ovgu.de:443/sap/opu/odata/sap/ZSD_SHIPMENT02_SRV_SRV/$metadata"
+                xmlns:atom="http://www.w3.org/2005/Atom"/>
+                <atom:link rel="latest-version" href="http://r36z.ucc.ovgu.de:443/sap/opu/odata/sap/ZSD_SHIPMENT02_SRV_SRV/$metadata"
+                    xmlns:atom="http://www.w3.org/2005/Atom"/>
+                </Schema>
+            </edmx:DataServices>
+        </edmx:Edmx>

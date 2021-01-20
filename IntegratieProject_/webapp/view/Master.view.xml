@@ -1,0 +1,100 @@
+<mvc:View
+	controllerName="IntProject.IntegratieProject.controller.Master"
+	xmlns="sap.m"
+	xmlns:semantic="sap.f.semantic"
+	xmlns:mvc="sap.ui.core.mvc">
+
+	<semantic:SemanticPage
+		id="masterPage"
+		preserveHeaderStateOnScroll="true"
+		toggleHeaderOnTitleClick="false">
+		<semantic:titleHeading>
+			<Title
+				id="masterPageTitle"
+				text="{masterView>/title}"
+				level="H2"/>
+		</semantic:titleHeading>
+		<semantic:content>
+			<!-- For client side filtering add this to the items attribute: parameters: {operationMode: 'Client'}}" -->
+			<List
+				id="list"
+				width="auto"
+				class="sapFDynamicPageAlignContent"
+				items="{
+					path: '/ShipmentSet',
+					sorter: {
+						path: 'Tknum',
+						descending: false
+					},
+					groupHeaderFactory: '.createGroupHeader'
+				}"
+				busyIndicatorDelay="{masterView>/delay}"
+				noDataText="{masterView>/noDataText}"
+				mode="{= ${device>/system/phone} ? 'None' : 'SingleSelectMaster'}"
+				growing="true"
+				growingScrollToLoad="true"
+				updateFinished=".onUpdateFinished"
+				selectionChange=".onSelectionChange">
+				<infoToolbar>
+					<Toolbar
+						active="true"
+						id="filterBar"
+						visible="{masterView>/isFilterBarVisible}"
+						press=".onOpenViewSettings">
+						<Title
+							id="filterBarLabel"
+							text="{masterView>/filterBarLabel}"
+							level="H3"/>
+					</Toolbar>
+				</infoToolbar>
+				<headerToolbar>
+					<OverflowToolbar id="otb8">
+		        <Input id="companyCodeInput" width="10%" placeholder="Company code">
+			        <layoutData>
+				        <OverflowToolbarLayoutData
+					        shrinkable="true"
+					        minWidth = "100px"/>
+			        </layoutData>
+		        </Input>
+                <Input id="planningPointInput" width="10%" placeholder="Planning point">
+			        <layoutData>
+				        <OverflowToolbarLayoutData
+					        shrinkable="true"
+					        minWidth = "100px"/>
+			        </layoutData>
+		        </Input>
+                <DatePicker id="dateFilter" width="10rem"></DatePicker>
+                <Button text="Search shipments" type="Transparent" press="onPress">
+			        <layoutData>
+				        <OverflowToolbarLayoutData
+					        shrinkable="true"
+					        minWidth = "50px"/>
+			        </layoutData>
+		        </Button>
+                <Button text="Clear search" type="Transparent" press="onPressClear">
+			        <layoutData>
+				        <OverflowToolbarLayoutData
+					        shrinkable="true"
+					        minWidth = "50px"/>
+			        </layoutData>
+		        </Button>
+		        <ToolbarSpacer/>
+	        </OverflowToolbar>
+				</headerToolbar>
+				<items>
+					<ObjectListItem
+						type="Navigation"
+						press=".onSelectionChange"
+						title="{Tknum}"
+                        number="{ path: 'PlannedDate', formatter: '.formatter.dateValue' }"
+                    >
+			            <ObjectAttribute text="{Tplst}"/>
+                        <ObjectAttribute text="{Bukrs}"/>
+					</ObjectListItem>
+				</items>
+			</List>
+		</semantic:content>
+	</semantic:SemanticPage>
+</mvc:View>
+
+<!-- numberUnit="{ path: 'PlannedDate', formatter: '.formatter.timeValue' }"> -->
