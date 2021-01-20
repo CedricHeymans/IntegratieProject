@@ -70,16 +70,16 @@
                 <Table id="deliveryItems" items="{detailView>/DeliveryItems}" noDataText="{i18n>detailLineItemTableNoDataText}">
                     <columns>
                         <Column>
-                            <Text text="{i18n>vbeln}"/>
-                        </Column>
-                        <Column>
-                            <Text text="{i18n>posnr}"/>
+                            <Text text="{i18n>lfimg}"/>
                         </Column>
                         <Column>
                             <Text text="{i18n>matnr}"/>
                         </Column>
                         <Column>
-                            <Text text="{i18n>lfimg}"/>
+                            <Text text="{i18n>posnr}"/>
+                        </Column>
+                        <Column>
+                            <Text text="{i18n>vbeln}"/>
                         </Column>
                         <Column>
                             <Text text="{i18n>vrkme}"/>
@@ -88,11 +88,11 @@
                     <items>
                         <ColumnListItem>
                             <cells>
-                                <ObjectIdentifier text="{Vbeln}"/>
-                                <ObjectIdentifier text="{Posnr}"/>
-                                <ObjectIdentifier text="{Matnr}"/>
-                                <ObjectIdentifier text="{Lfimg}"/>
-                                <ObjectIdentifier text="{Vrkme}"/>
+                                <ObjectIdentifier text="{detailView>Lfimg}"/>
+                                <ObjectIdentifier text="{detailView>Matnr}"/>
+                                <ObjectIdentifier text="{detailView>Posnr}"/>
+                                <ObjectIdentifier text="{detailView>Vbeln}"/>
+                                <ObjectIdentifier text="{detailView>Vrkme}"/>
                             </cells>
                         </ColumnListItem>
                     </items>

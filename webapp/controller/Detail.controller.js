@@ -76,14 +76,14 @@ sap.ui.define([
 		},
         
         onPress : function(oEvent) {
-             var oFlightSchedule = oEvent.getSource().getBindingContext(),
+             var oDelivery = oEvent.getSource().getBindingContext(),
                 sPath = this.getModel().createKey("DeliverySet", {
-                    Tknum: "1019",
-                    Vbeln: "80000000"
+                    Tknum: oDelivery.getProperty('Tknum'),
+                    Vbeln: oDelivery.getProperty('Vbeln')
                 });
             sPath = "/" + sPath + "/DelivToDelitNav";
-            // this.getModel("detailView").setProperty("/Connid", oFlightSchedule.getProperty('Connid'));
-            // this.getModel("detailView").setProperty("/Flights", []);
+            this.getModel("detailView").setProperty("/Tknum", oDelivery.getProperty('Tknum'));
+            this.getModel("detailView").setProperty("/DeliveryItems", []);
             this.getModel().read(sPath, {
                 success: function (oData) {
                     console.log(oData);

@@ -276,8 +276,10 @@ sap.ui.define([
              var oPlanningPoint = this.byId("planningPointInput").getValue();
              var oCompanyCode = this.byId("companyCodeInput").getValue();
              var oPlannedDate = this.byId("dateFilter").getValue();
+             var a = oPlannedDate.split('-');
+             oPlannedDate = a[2] + "-" + a[1] + "-" + a[0] + "T00:00:00";
+             console.log(oPlannedDate);
 
-             
             // list opvragen
             var oList = this.byId("list"),
                 // binding items
@@ -288,20 +290,23 @@ sap.ui.define([
                 operator: "EQ",
                 value1: oPlanningPoint
             }), new sap.ui.model.Filter({
-                path: "Tplst",
+                path: "Bukrs",
                 // @ts-ignore
                 operator: "EQ",
-                value1: oPlanningPoint
+                value1: oCompanyCode
             }), new sap.ui.model.Filter({
-                path: "Tplst",
+                path: "PlannedDate",
                 // @ts-ignore
                 operator: "EQ",
-                value1: oPlanningPoint
+                value1: oPlannedDate
             })];
             // filter op los laten
             oBinding.filter(aFilters);
+            this.getView().byId("dateFilter").setValue(null);
+            this.getView().byId("planningPointInput").setValue(null);
+            this.getView().byId("companyCodeInput").setValue(null);
         },
-        
+
         onPressClear : function(oEvent) {
              var oList = this.byId("list"),
                 // binding items
