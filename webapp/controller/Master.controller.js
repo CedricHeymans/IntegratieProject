@@ -6,9 +6,11 @@ sap.ui.define([
 	"sap/ui/model/FilterOperator",
 	"sap/m/GroupHeaderListItem",
 	"sap/ui/Device",
-	"sap/ui/core/Fragment",
-	"../model/formatter"
-], function (BaseController, JSONModel, Filter, Sorter, FilterOperator, GroupHeaderListItem, Device, Fragment, formatter) {
+    "sap/ui/core/Fragment",
+    "sap/m/MessageToast",
+    "../model/formatter",
+    'sap/ui/core/BusyIndicator'
+], function (BaseController, JSONModel, Filter, Sorter, FilterOperator, GroupHeaderListItem, Device, Fragment, MessageToast, formatter, BusyIndicator) {
 	"use strict";
 
 	return BaseController.extend("IntProject.IntegratieProject.controller.Master", {
@@ -32,6 +34,7 @@ sap.ui.define([
 				// taken care of by the master list itself.
 				iOriginalBusyDelay = oList.getBusyIndicatorDelay();
 
+            //Ophalen per x aantal shipments
 			this._oGroupFunctions = {
 				TimeIn : function(oContext) {
 					var iNumber = oContext.getProperty('TimeIn'),
@@ -234,7 +237,17 @@ sap.ui.define([
 			if (!(oList.getMode() === "MultiSelect" && !bSelected)) {
 				// get the list item, either from the listItem parameter or from the event's source itself (will depend on the device-dependent mode).
 				this._showDetail(oEvent.getParameter("listItem") || oEvent.getSource());
-			}
+            }
+
+            //Poging om deliveryItem tabel leeg te maken wanneer je een andere shipment aanklikt
+            
+            //var table = this.getView("detailView").byId("deliveryItems");
+            //var oModel1 = new sap.ui.model.json.JSONModel();
+            //var data =[];
+            //oModel1.setData(data);
+            //var aData = oModel1.getProperty("/d/results");
+            //oModel1.setData({ modelData : aData });
+            //table.setModel(oModel1, "odata");
 		},
 
 		/**
@@ -271,43 +284,81 @@ sap.ui.define([
 			history.go(-1);
 		},
 
+        hideBusyIndicator : function() {
+			BusyIndicator.hide();
+		},
+        
+        //Display 3 dots to simulate "loading"
+		showBusyIndicator : function (iDuration, iDelay) {
+			BusyIndicator.show(iDelay);
 
+			if (iDuration && iDuration > 0) {
+				if (this._sTimeoutId) {
+					clearTimeout(this._sTimeoutId);
+					this._sTimeoutId = null;
+				}
+
+				this._sTimeoutId = setTimeout(function() {
+					this.hideBusyIndicator();
+				}.bind(this), iDuration);
+			}
+		},
+
+        //Filter on planningpoint, companycode or planneddate button press
         onPress : function(oEvent) {
-             var oPlanningPoint = this.byId("planningPointInput").getValue();
-             var oCompanyCode = this.byId("companyCodeInput").getValue();
-             var oPlannedDate = this.byId("dateFilter").getValue();
-             var a = oPlannedDate.split('-');
-             oPlannedDate = a[2] + "-" + a[1] + "-" + a[0] + "T00:00:00";
-             console.log(oPlannedDate);
+            this.showBusyIndicator(500, 0);
+             var oPlanningPoint = this.byId("planningPointInput").getValue(),
+                 oCompanyCode = this.byId("companyCodeInput").getValue(),
+                 //oPlannedDate = this.byId("dateFilter").getDateValue(),
+                 oPlannedDate = this.getModel("masterView").getProperty("/date"),
+                 aFilters = [],
+                 msg = 'No filter fields were filled in';
 
-            // list opvragen
-            var oList = this.byId("list"),
-                // binding items
-                oBinding = oList.getBinding("items"),
-                aFilters = [new sap.ui.model.Filter({
+             if(oPlanningPoint.length > 0){
+                aFilters.push(new sap.ui.model.Filter({
                 path: "Tplst",
                 // @ts-ignore
                 operator: "EQ",
                 value1: oPlanningPoint
-            }), new sap.ui.model.Filter({
+                }));
+             }
+             if(oCompanyCode.length > 0){
+                aFilters.push(new sap.ui.model.Filter({
                 path: "Bukrs",
                 // @ts-ignore
                 operator: "EQ",
                 value1: oCompanyCode
-            }), new sap.ui.model.Filter({
+                }))
+             }
+             if(oPlannedDate){
+                oPlannedDate = oPlannedDate.toISOString();
+                aFilters.push(new sap.ui.model.Filter({
                 path: "PlannedDate",
                 // @ts-ignore
                 operator: "EQ",
                 value1: oPlannedDate
-            })];
+                }))
+                console.log(oPlannedDate);
+             }
+             if(!(oPlanningPoint.length > 0 || oCompanyCode.length > 0 || oPlannedDate)){
+			    MessageToast.show(msg);
+             }
+
+            // list opvragen
+            var oList = this.byId("list"),
+                // binding items
+                oBinding = oList.getBinding("items");
+
             // filter op los laten
             oBinding.filter(aFilters);
-            this.getView().byId("dateFilter").setValue(null);
-            this.getView().byId("planningPointInput").setValue(null);
-            this.getView().byId("companyCodeInput").setValue(null);
+            //this.getView().byId("dateFilter").setValue(null);
+            //this.getView().byId("planningPointInput").setValue(null);
+            //this.getView().byId("companyCodeInput").setValue(null);
         },
 
+        //Clear all search fields + reload the shipmentList
         onPressClear : function(oEvent) {
+            this.showBusyIndicator(500, 0);
              var oList = this.byId("list"),
                 // binding items
                 oBinding = oList.getBinding("items"),
@@ -319,6 +370,18 @@ sap.ui.define([
             this.getView().byId("dateFilter").setValue(null);
             this.getView().byId("planningPointInput").setValue(null);
             this.getView().byId("companyCodeInput").setValue(null);
+        },
+        
+        //Refresh page, reload all shipments     
+        refresh : function(oEvent) {
+            this.showBusyIndicator(500, 0);
+             var oList = this.byId("list"),
+                // binding items
+                oBinding = oList.getBinding("items"),
+                // no filters
+                aFilters = [];
+            // filter op los laten
+            oBinding.filter(aFilters);
         },
 		/* =========================================================== */
 		/* begin: internal methods                                     */
@@ -333,7 +396,8 @@ sap.ui.define([
 				title: this.getResourceBundle().getText("masterTitleCount", [0]),
 				noDataText: this.getResourceBundle().getText("masterListNoDataText"),
 				sortBy: "Tknum",
-				groupBy: "None"
+                groupBy: "None",
+                date: null
 			});
 		},
 

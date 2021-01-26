@@ -24,7 +24,8 @@ sap.ui.define([
 			var oViewModel = new JSONModel({
 				busy : false,
 				delay : 0,
-				lineItemListTitle : this.getResourceBundle().getText("detailLineItemTableHeading")
+                lineItemListTitle : this.getResourceBundle().getText("detailLineItemTableHeading"),
+                DeliveryItems: []
 			});
 
 			this.getRouter().getRoute("object").attachPatternMatched(this._onObjectMatched, this);
@@ -37,21 +38,6 @@ sap.ui.define([
 		/* =========================================================== */
 		/* event handlers                                              */
 		/* =========================================================== */
-
-		/**
-		 * Event handler when the share by E-Mail button has been clicked
-		 * @public
-		 */
-		onSendEmailPress : function () {
-			var oViewModel = this.getModel("detailView");
-
-			URLHelper.triggerEmail(
-				null,
-				oViewModel.getProperty("/shareSendEmailSubject"),
-				oViewModel.getProperty("/shareSendEmailMessage")
-			);
-		},
-
 
 		/**
 		 * Updates the item count within the line item table's header
@@ -75,6 +61,7 @@ sap.ui.define([
 			}
 		},
         
+        //When clicking on a delivery, filter all their deliveryitems and fill tabel
         onPress : function(oEvent) {
              var oDelivery = oEvent.getSource().getBindingContext(),
                 sPath = this.getModel().createKey("DeliverySet", {
@@ -82,11 +69,10 @@ sap.ui.define([
                     Vbeln: oDelivery.getProperty('Vbeln')
                 });
             sPath = "/" + sPath + "/DelivToDelitNav";
-            this.getModel("detailView").setProperty("/Tknum", oDelivery.getProperty('Tknum'));
+            this.getModel("detailView").setProperty("/Vbeln", oDelivery.getProperty('Vbeln'));
             this.getModel("detailView").setProperty("/DeliveryItems", []);
             this.getModel().read(sPath, {
                 success: function (oData) {
-                    console.log(oData);
                     this.getModel("detailView").setProperty("/DeliveryItems", oData.results);
                 }.bind(this)
             });
@@ -108,7 +94,8 @@ sap.ui.define([
 				var sObjectPath = this.getModel().createKey("ShipmentSet", {
 					Tknum :  sObjectId
 				});
-				this._bindView("/" + sObjectPath);
+                this._bindView("/" + sObjectPath);
+                this.getModel("detailView").setProperty("/DeliveryItems", []);
 			}.bind(this));
 		},
 

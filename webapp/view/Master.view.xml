@@ -15,7 +15,7 @@
 				level="H2"/>
 		</semantic:titleHeading>
 		<semantic:content>
-			<!-- For client side filtering add this to the items attribute: parameters: {operationMode: 'Client'}}" -->
+			<!-- ShipmentList -->
 			<List
 				id="list"
 				width="auto"
@@ -63,15 +63,22 @@
 					        minWidth = "100px"/>
 			        </layoutData>
 		        </Input>
-                <DatePicker id="dateFilter" width="10rem"></DatePicker>
-                <Button text="Search shipments" type="Transparent" press="onPress">
+                <DatePicker id="dateFilter" width="10rem" value="{path:'masterView>/date', type:'sap.ui.model.type.Date', formatOptions: { UTC: true}}"></DatePicker>
+                <Button icon="sap-icon://filter" type="Transparent" press="onPress">
 			        <layoutData>
 				        <OverflowToolbarLayoutData
 					        shrinkable="true"
 					        minWidth = "50px"/>
 			        </layoutData>
 		        </Button>
-                <Button text="Clear search" type="Transparent" press="onPressClear">
+                <Button icon="sap-icon://clear-filter" type="Transparent" press="onPressClear">
+			        <layoutData>
+				        <OverflowToolbarLayoutData
+					        shrinkable="true"
+					        minWidth = "50px"/>
+			        </layoutData>
+		        </Button>
+				<Button icon="sap-icon://refresh" type="Transparent" press="refresh">
 			        <layoutData>
 				        <OverflowToolbarLayoutData
 					        shrinkable="true"
@@ -86,8 +93,12 @@
 						type="Navigation"
 						press=".onSelectionChange"
 						title="{Tknum}"
-                        number="{ path: 'PlannedDate', formatter: '.formatter.dateValue' }"
-                    >
+                        number="{ path: 'PlannedDate',
+				                  type: 'sap.ui.model.type.Date',
+				                  formatOptions: {
+					              style: 'short'
+				                } 
+                            }">
 			            <ObjectAttribute text="{Tplst}"/>
                         <ObjectAttribute text="{Bukrs}"/>
 					</ObjectListItem>
@@ -96,5 +107,3 @@
 		</semantic:content>
 	</semantic:SemanticPage>
 </mvc:View>
-
-<!-- numberUnit="{ path: 'PlannedDate', formatter: '.formatter.timeValue' }"> -->

@@ -6,34 +6,25 @@
 	xmlns:semantic="sap.f.semantic"
 	xmlns:mvc="sap.ui.core.mvc"
     xmlns:core="sap.ui.core">
-
+    
 	<semantic:SemanticPage
 		id="detailPage"
 		busy="{detailView>/busy}"
 		busyIndicatorDelay="{detailView>/delay}">
-		<semantic:titleHeading>
-			<Title
-				text="{Tknum}"
-				level="H2"/>
+        <semantic:titleHeading>
+		    <Title text="Shipment number: {Tknum}" />
 		</semantic:titleHeading>
 		<semantic:headerContent>
             <ObjectHeader
                 icon="sap-icon://shipping-status"
-                title="{ContainerId}"
                 class="sapUiResponsivePadding--header" >
+                <ObjectAttribute text="Container ID: {ContainerId}" />
+                <ObjectAttribute text="Transporter: {Transporteur}"/>
             </ObjectHeader>
-            <ObjectIdentifier 
-                text="{Transporteur}"
-            />
+            
         </semantic:headerContent>
 		<semantic:content>
-			<IconTabBar
-		        id="idIconTabBarNoIcons"
-		        expanded="{device>/isNoPhone}"
-		        class="sapUiResponsiveContentPadding">
-		<items>
-			
-			<IconTabFilter text="Deliveries" key="deliveries">
+			<!-- Delivery list -->
 			<VBox>
                 <Table id="lineItemsList" width="auto" items="{ShipToDelivNav}" updateFinished=".onListUpdateFinished" noDataText="{i18n>detailLineItemTableNoDataText}" busyIndicatorDelay="{detailView>/lineItemTableDelay}">
                     <headerToolbar>
@@ -42,9 +33,6 @@
                         </Toolbar>
                     </headerToolbar>
                     <columns>
-                        <Column>
-                            <Text text="{i18n>tknum}"/>
-                        </Column>
                         <Column>
                             <Text text="{i18n>vbeln}"/>
                         </Column>
@@ -56,9 +44,8 @@
                         </Column>
                     </columns>
                     <items>
-                        <ColumnListItem type="Active" press="onPress">
+                        <ColumnListItem type="Navigation" press="onPress">
                             <cells>
-                                <ObjectIdentifier text="{Tknum}"/>
                                 <ObjectIdentifier text="{Vbeln}"/>
                                 <ObjectIdentifier text="{Vstel}"/>
                                 <ObjectIdentifier text="{Werks}"/>
@@ -67,19 +54,22 @@
                     </items>
                 </Table>
                 
-                <Table id="deliveryItems" items="{detailView>/DeliveryItems}" noDataText="{i18n>detailLineItemTableNoDataText}">
+                <!-- Delivery item list -->
+                <Table id="deliveryItems" visible="{= ${detailView>/DeliveryItems} &amp;&amp; ${detailView>/DeliveryItems}.length > 0 }" items="{detailView>/DeliveryItems}" noDataText="{i18n>detailLineItemTableNoDataText}">
+                <headerToolbar>
+                        <Toolbar>
+                            <Title id="lineDeliveryItemsTitle" text="Delivery item: {detailView>/Vbeln}" titleStyle="H3" level="H3"/>
+                        </Toolbar>
+                    </headerToolbar>
                     <columns>
                         <Column>
-                            <Text text="{i18n>lfimg}"/>
+                            <Text text="{i18n>posnr}"/>
                         </Column>
                         <Column>
                             <Text text="{i18n>matnr}"/>
                         </Column>
                         <Column>
-                            <Text text="{i18n>posnr}"/>
-                        </Column>
-                        <Column>
-                            <Text text="{i18n>vbeln}"/>
+                            <Text text="{i18n>lfimg}"/>
                         </Column>
                         <Column>
                             <Text text="{i18n>vrkme}"/>
@@ -88,26 +78,16 @@
                     <items>
                         <ColumnListItem>
                             <cells>
-                                <ObjectIdentifier text="{detailView>Lfimg}"/>
+                                <ObjectIdentifier text="{ path: 'detailView>Posnr', formatter: '.formatter.leadingzero' }" />
                                 <ObjectIdentifier text="{detailView>Matnr}"/>
-                                <ObjectIdentifier text="{detailView>Posnr}"/>
-                                <ObjectIdentifier text="{detailView>Vbeln}"/>
+                                <ObjectIdentifier text="{detailView>Lfimg}"/>
                                 <ObjectIdentifier text="{detailView>Vrkme}"/>
                             </cells>
                         </ColumnListItem>
                     </items>
                 </Table>
             </VBox>
-			</IconTabFilter>
-		</items>
-	</IconTabBar>
 		</semantic:content>
-		<!--Semantic ShareMenu Buttons-->
-		<semantic:sendEmailAction>
-			<semantic:SendEmailAction
-				id="shareEmail"
-				press=".onSendEmailPress"/>
-		</semantic:sendEmailAction>
 
 		<semantic:closeAction>
 			<semantic:CloseAction
@@ -127,7 +107,5 @@
 					visible="{= !${device>/system/phone} &amp;&amp; ${appView>/actionButtonsInfo/midColumn/fullScreen}}"
 					press=".toggleFullScreen"/>
 		</semantic:exitFullScreenAction>
-
 	</semantic:SemanticPage>
-
 </mvc:View>
