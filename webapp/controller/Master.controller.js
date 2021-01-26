@@ -382,6 +382,10 @@ sap.ui.define([
                 aFilters = [];
             // filter op los laten
             oBinding.filter(aFilters);
+
+            this.getView().byId("dateFilter").setValue(null);
+            this.getView().byId("planningPointInput").setValue(null);
+            this.getView().byId("companyCodeInput").setValue(null);
         },
 		/* =========================================================== */
 		/* begin: internal methods                                     */
